@@ -1,1 +1,190 @@
-# RefVoyage
+index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- iOS Mobile Meta Tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>RefVoyage - Earn Money</title>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    
+    <!-- iOS App Icon -->
+    <link rel="apple-touch-icon" href="icon.png">
+    
+    <style>
+        /* Mobile-First CSS */
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; 
+            margin: 0; 
+            padding: 15px;
+            background: #f8f9fa;
+        }
+        .container { 
+            max-width: 600px; 
+            margin: auto;
+            padding-top: 40px;
+        }
+        .card { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 15px; 
+            margin: 10px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        button { 
+            background: #007AFF;  
+const firebaseConfig = {
+  apiKey: "AIzaSyA8kgEv3RUeaBWWj77SnkYlRaBm1gBSCEs",
+  authDomain: "refvoyage-ebe0d.firebaseapp.com",
+  projectId: "refvoyage-ebe0d",
+  storageBucket: "refvoyage-ebe0d.firebasestorage.app",
+  messagingSenderId: "251787363419",
+  appId: "1:251787363419:web:8e73eaa084caad6e3beb7e",
+  measurementId: "G-LYMCFX8WZE"
+};color: white; 
+            padding: 12px 25px; 
+            border: none; 
+            border-radius: 8px;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        #referral-link { 
+            background: #e9ecef; 
+            padding: 12px; 
+            border-radius: 8px;
+            word-break: break-all;
+            font-family: Menlo, monospace;
+        }
+        .menu-icon {
+            display: block;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hamburger Menu -->
+    <div class="menu-icon" onclick="toggleMenu()">â˜°</div>
+    
+    <div class="container">
+        <!-- Header -->
+        <h1 style="color: #007AFF;">ðŸš€ RefVoyage</h1>
+        <p>Your Referral ID: <strong id="userId">â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢</strong></p>
+        
+        <!-- Dashboard Card -->
+        <div class="card">
+            <h3>ðŸ’° Earnings: $<span id="earnings">0</span></h3>
+            <h3>ðŸ‘¥ Referrals: <span id="referralCount">0</span></h3>
+            <div id="referral-link">Loading...</div>
+            <button onclick="copyLink()">Copy Referral Link</button>
+        </div>
+
+        <!-- Withdrawal Card -->
+        <div class="card">
+            <h3>ðŸ’¸ Cash Out</h3>
+            <input type="number" id="amount" placeholder="Amount ($)" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin: 10px 0;">
+            <button onclick="requestWithdrawal()">Withdraw via PayPal</button>
+        </div>
+
+        <!-- Reviews Card -->
+        <div class="card">
+            <h3>â­ 4.9/5 (2K+ Reviews)</h3>
+            <p>"Earned $1200 in 2 weeks! - Sarah"</p>
+            <p>"Best passive income app! - Mike"</p>
+        </div>
+    </div>
+
+    <script>
+        // Firebase Config (REPLACE WITH YOUR VALUES)
+        const firebaseConfig = {
+            apiKey: "AIzaSyYourAPIKeyHere",
+            authDomain: "your-project.firebaseapp.com",
+            projectId: "your-project-id",
+            storageBucket: "your-bucket.appspot.com",
+            messagingSenderId: "1234567890",
+            appId: "1:1234567890:web:abcd1234efgh5678"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // Security Rules (Set in Firebase Console)
+        /*
+        rules_version = '2';
+        service cloud.firestore {
+          match /databases/{database}/documents {
+            match /{document=**} {
+              allow read, write: if request.auth != null;
+            }
+          }
+        }
+        */
+
+        let currentUser = null;
+        
+        // Authentication
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('userId').textContent = user.uid.slice(0,8);
+                document.getElementById('referral-link').textContent = 
+                    `${window.location.href}?ref=${user.uid}`;
+                loadUserData();
+            } else {
+                const urlParams = new URLSearchParams(window.location.search);
+                const refCode = urlParams.get('ref');
+                auth.signInAnonymously().then(() => {
+                    if(refCode) trackReferral(refCode);
+                });
+            }
+        });
+
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            // Add menu items here
+            alert('Menu coming soon!');
+        }
+
+        async function trackReferral(referrerId) {
+            await db.collection('referrals').add({
+                referrer: referrerId,
+                referred: currentUser.uid,
+                timestamp: new Date()
+            });
+        }
+
+        async function loadUserData() {
+            const userDoc = await db.collection('users').doc(currentUser.uid).get();
+            document.getElementById('earnings').textContent = userDoc.data()?.balance || 0;
+            
+            const referrals = await db.collection('referrals')
+                .where('referrer', '==', currentUser.uid).get();
+            document.getElementById('referralCount').textContent = referrals.size;
+        }
+
+        function copyLink() {
+            navigator.clipboard.writeText(document.getElementById('referral-link').textContent);
+            alert('âœ… Link copied to clipboard!');
+        }
+
+        function requestWithdrawal() {
+            const amount = document.getElementById('amount').value;
+            if(amount < 20) {
+                alert('Minimum withdrawal: $20');
+                return;
+            }
+            alert(`ðŸ“¬ Withdrawal request for $${amount} submitted!\nProcessed within 24h.`);
+        }
+    </script>
+</body>
+</html>
