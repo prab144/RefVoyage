@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ... (keep head section same as before until style tag) ... -->
+    <style>
+        /* Mobile-First CSS */
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; 
+            margin: 0; 
+            padding: 15px;
+            background: #f8f9fa;
+        }
+        .container { 
+            max-width: 600px; 
+            margin: auto;
+            padding-top: 40px;
+        }
+        .card { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 15px; 
+            margin: 10px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        button { 
+            background: #007AFF;
+            color: white; 
+            padding: 12px 25px;
+            border: none; 
+            border-radius: 8px;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        /* ... (rest of CSS remains same) ... */
+    </style>
+</head>
+<!-- ... (keep body content same) ... -->
+<script>
+    // CORRECT FIREBASE CONFIG (REPLACE WITH YOUR VALUES)
+    const firebaseConfig = {
+        apiKey: "AIzaSyA8kgEv3RUeaBWWj77SnkY1RaBmIgBSCEs",
+        authDomain: "refvoyage-ebe0d.firebaseapp.com",
+        projectId: "refvoyage-ebe0d",
+        storageBucket: "refvoyage-ebe0d.appspot.com", // Fixed storageBucket
+        messagingSenderId: "251787363419",
+        appId: "1:251787363419:web:8e73eaa084caad6e3beb7e"
+    };
+    firebase.initializeApp(firebaseConfig);
+    // ... (rest of script remains same)
+</script>
+      // Firebase Config (USE YOUR VALUES)
+        const firebaseConfig = {
+            apiKey: "AIzaSyA8kgEv3RUeaBWWj77SnkY1RaBmIgBSCEs",
+            authDomain: "refvoyage-ebe0d.firebaseapp.com",
+            projectId: "refvoyage-ebe0d",
+            storageBucket: "refvoyage-ebe0d.appspot.com",
+            messagingSenderId: "251787363419",
+            appId: "1:251787363419:web:8e73eaa084caad6e3beb7e"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // ... rest of your JavaScript code ...
+    </script>
+</body>
+</html>
